@@ -20,12 +20,12 @@ Get started
 Follow the :doc:`instructions<install/index>` to install ``pytorch_utils``.
 
 .. toctree::
-    :caption: Modules 
+    :caption: pytorch_utils 
     :maxdepth: 1
     :hidden:
     :glob:
 
-    nn
+    pytorch_utils
 
 .. .. toctree::
 ..     :caption: Notebooks
