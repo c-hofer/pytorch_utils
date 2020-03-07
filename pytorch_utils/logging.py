@@ -55,7 +55,7 @@ def get_an_id(tag):
     return exp_id
 
 
-class ExperimentLogger():
+class Logger():
     def __init__(self, log_dir, experiment_args: dict):
         self.log_dir = Path(log_dir)
         self.current_cv_run = -1
