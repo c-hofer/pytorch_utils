@@ -78,15 +78,31 @@ class Transformer(DynamicDatasetWrapper):
 # region dataset operations
 
 
-def ds_statistics(ds):
-    x, _ = ds[0]
+def ds_statistics(dataset: torch.utils.data.dataset.Dataset) -> dict:
+    """[summary]
+    
+    Args:
+        dataset (torch.utils.data.dataset.Dataset): dataset to analyze
+    
+    Returns:
+        dict: a dict with the following key-value pairs:
+
+            channel_mean: mean over the first dimension of the dataset items.
+
+            channel_std: standard deviation over the first dimension of the 
+            dataset items.
+
+            num_classes: number of classes in the dataset. 
+    """
+
+    x, _ = dataset[0]
     if not isinstance(x, torch.Tensor):
-        ds = Transformer(ds, torchvision.transforms.ToTensor())
+        dataset = Transformer(dataset, torchvision.transforms.ToTensor())
 
     X = []
     Y = []
-    for i in range(len(ds)):
-        x, y = ds[i]
+    for i in range(len(dataset)):
+        x, y = dataset[i]
         x = x.view(x.size(0), -1)
         X.append(x)
         Y.append(y)
@@ -107,9 +123,9 @@ def ds_statistics(ds):
 
 def ds_random_subset(
         dataset: torch.utils.data.dataset.Dataset,
-        percentage: float=None,
-        absolute_size: int=None,
-        replace: bool=False):
+        percentage: float = None,
+        absolute_size: int = None,
+        replace: bool = False):
     r"""
     Represents a fixed random subset of the given dataset.
 
@@ -134,7 +150,8 @@ def ds_random_subset(
     if absolute_size is not None:
         assert absolute_size <= len(dataset)
 
-    n_samples = int(percentage*len(dataset)) if percentage is not None else absolute_size
+    n_samples = int(percentage*len(dataset)
+                    ) if percentage is not None else absolute_size
     indices = np.random.choice(
         list(range(len(dataset))),
         n_samples,
@@ -160,10 +177,14 @@ def ds_label_filter(
         the selected labels.
     """
     assert isinstance(dataset, torch.utils.data.dataset.Dataset)
-    assert isinstance(labels, (tuple, list)), "labels is expected to be list or tuple."
-    assert len(set(labels)) == len(labels), "labels is expected to have unique elements."
-    assert hasattr(dataset, 'targets'), "dataset is expected to have 'targets' attribute"
-    assert set(labels) <= set(dataset.targets), "labels is expected to contain only valid labels of dataset"
+    assert isinstance(labels, (tuple, list)
+                      ), "labels is expected to be list or tuple."
+    assert len(set(labels)) == len(
+        labels), "labels is expected to have unique elements."
+    assert hasattr(
+        dataset, 'targets'), "dataset is expected to have 'targets' attribute"
+    assert set(labels) <= set(
+        dataset.targets), "labels is expected to contain only valid labels of dataset"
 
     indices = [i for i in range(len(dataset)) if dataset.targets[i] in labels]
 
