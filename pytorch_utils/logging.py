@@ -160,7 +160,13 @@ class LoggerReader:
                 self._runs.append(_LazyFolderReader(fd)) 
 
     def __getitem__(self, idx):
-        return self._runs[idx]           
+        return self._runs[idx]
+
+    def __iter__(self):
+        yield from iter(self._runs) 
+
+    def __len__(self):
+        return len(self._runs)
 
     def load_model(self, run, key):
         p = self.path / (str(run) + '/' + key + self._module_ext)
