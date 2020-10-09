@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 import datetime
 import uuid
 import json
@@ -22,7 +23,8 @@ def convert_value_to_built_in_type(v):
             new_v = v.item()
         else:
             new_v = v.tolist()
-
+    elif isinstance(v, np.ndarray):
+        new_v = v.tolist()
     elif isinstance(v, dict):
         new_v = {k: convert_value_to_built_in_type(vv) for k, vv in v.items()}
     elif isinstance(v, list):
@@ -79,6 +81,12 @@ class Logger():
         assert self._value_buffer is not None
         v = convert_value_to_built_in_type(value)
         self._value_buffer[key].append(v)
+
+    def write_value(self, key: str, value):
+        assert isinstance(key, str)
+        assert self._value_buffer is not None
+        v = convert_value_to_built_in_type(value)
+        self._value_buffer[key] = v
 
     def write_logged_values_to_disk(self):
         for k, v in self._value_buffer.items():
