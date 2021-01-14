@@ -1,11 +1,12 @@
 import torch
 
 
-def apply_model(model, dataset, batch_size=100, device='cpu'):
+def apply_model(model, dataset, batch_size=100, device='cpu', shuffle=False):
     dl = torch.utils.data.DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=0
+        num_workers=0, 
+        shuffle=shuffle
     )
     X, Y = [], []
 
