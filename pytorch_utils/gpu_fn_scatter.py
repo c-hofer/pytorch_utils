@@ -130,7 +130,7 @@ class Distributor:
                 processes.append(proc)
 
                 proc.start()
-                time.sleep(1.0) # to make sure startup phases of process do not
+                time.sleep(3.0) # to make sure startup phases of process do not
                 # interleave
 
             for p in processes:
